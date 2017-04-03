@@ -6,6 +6,9 @@ const sourcemaps = require("gulp-sourcemaps");
 const debug = require("gulp-debug");
 const del = require("del");
 const newer = require("gulp-newer");
+const cssnano = require("gulp-cssnano");
+const postcss = require("gulp-postcss");
+const autoprefixer = require("autoprefixer");
 const browserSync = require("browser-sync").create();
 
 gulp.task("styles", function() {
@@ -13,6 +16,12 @@ gulp.task("styles", function() {
   return gulp.src("src/sass/style.scss")
     .pipe(sourcemaps.init())
     .pipe(sass())
+    .pipe(postcss([
+          autoprefixer({browsers: [
+            "last 2 versions"
+          ]})
+        ]))
+    .pipe(cssnano())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest("build/css"));
 

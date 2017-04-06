@@ -48,9 +48,19 @@ gulp.task("images", function() {
       .pipe(gulp.dest("build/img"));
 });
 
+gulp.task("video", function() {
+  return gulp.src("src/sass/blocks/**/*.{mp4,flv,ogv,webm,avi}", {since: gulp.lastRun("video")})
+      .pipe(newer("build"))
+      .pipe(rename(function(path) {
+        path.dirname = "";
+        return path;
+      }))
+      .pipe(gulp.dest("build/video"));
+});
+
 gulp.task("build", gulp.series(
   "clean",
-  gulp.parallel("styles", "assets", "images"))
+  gulp.parallel("styles", "assets", "images", "video"))
 );
 
 gulp.task("watch", function() {

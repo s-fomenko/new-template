@@ -9,6 +9,7 @@ const newer = require("gulp-newer");
 const cssnano = require("gulp-cssnano");
 const postcss = require("gulp-postcss");
 const autoprefixer = require("autoprefixer");
+const rename = require("gulp-rename");
 const browserSync = require("browser-sync").create();
 
 gulp.task("styles", function() {
@@ -31,15 +32,25 @@ gulp.task("clean", function() {
   return del("build");
 });
 
-gulp.task('assets', function() {
-  return gulp.src('src/assets/**', {since: gulp.lastRun('assets')})
-      .pipe(newer('build'))
-      .pipe(gulp.dest('build'));
+gulp.task("assets", function() {
+  return gulp.src("src/assets/**", {since: gulp.lastRun('assets')})
+      .pipe(newer("build"))
+      .pipe(gulp.dest("build"));
+});
+
+gulp.task("images", function() {
+  return gulp.src("src/sass/blocks/**/*.{png,jpg,svg}", {since: gulp.lastRun("images")})
+      .pipe(newer("build"))
+      .pipe(rename(function(path) {
+        path.dirname = "";
+        return path;
+      }))
+      .pipe(gulp.dest("build/img"));
 });
 
 gulp.task("build", gulp.series(
   "clean",
-  gulp.parallel("styles", "assets"))
+  gulp.parallel("styles", "assets", "images"))
 );
 
 gulp.task("watch", function() {

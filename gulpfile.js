@@ -13,6 +13,7 @@ const rename = require("gulp-rename");
 const gulpIf = require("gulp-if");
 const browserSync = require("browser-sync").create();
 
+// Запуск `NODE_ENV=production gulp [задача]` приведет к сборке без sourcemaps
 const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV == 'development';
 
 gulp.task("styles", function() {

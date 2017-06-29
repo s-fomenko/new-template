@@ -14,12 +14,14 @@ const browserSync = require("browser-sync").create();
 
 gulp.task("styles", function() {
 
-  return gulp.src("src/sass/style.scss")
+  return gulp.src("src/style.scss")
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(postcss([
           autoprefixer({browsers: [
-            "last 2 versions"
+            "> 1%",
+            "last 2 versions",
+            "Firefox ESR"
           ]})
         ]))
     .pipe(cssnano())
@@ -33,13 +35,13 @@ gulp.task("clean", function() {
 });
 
 gulp.task("assets", function() {
-  return gulp.src("src/assets/**", {since: gulp.lastRun('assets')})
+  return gulp.src("src/**/*.html", {since: gulp.lastRun('assets')})
       .pipe(newer("build"))
       .pipe(gulp.dest("build"));
 });
 
 gulp.task("images", function() {
-  return gulp.src("src/sass/blocks/**/*.{png,jpg,svg}", {since: gulp.lastRun("images")})
+  return gulp.src("src/blocks/**/*.{png,jpg,svg}", {since: gulp.lastRun("images")})
       .pipe(newer("build"))
       .pipe(rename(function(path) {
         path.dirname = "";
@@ -49,7 +51,7 @@ gulp.task("images", function() {
 });
 
 gulp.task("video", function() {
-  return gulp.src("src/sass/blocks/**/*.{mp4,flv,ogv,webm,avi}", {since: gulp.lastRun("video")})
+  return gulp.src("src/blocks/**/*.{mp4,flv,ogv,webm,avi}", {since: gulp.lastRun("video")})
       .pipe(newer("build"))
       .pipe(rename(function(path) {
         path.dirname = "";
@@ -64,9 +66,11 @@ gulp.task("build", gulp.series(
 );
 
 gulp.task("watch", function() {
-  gulp.watch("src/sass/**/*.*", gulp.series("styles"));
+  gulp.watch("src/blocks/**/*.*", gulp.series("styles"));
 
-  gulp.watch("src/assets/**/*.*", gulp.series("assets"));
+  gulp.watch("src/**/*.html", gulp.series("assets"));
+
+  gulp.watch("src/blocks/**/*.{png,jpg,svg}", gulp.series("images"));
 });
 
 gulp.task("serve", function() {

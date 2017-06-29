@@ -10,12 +10,15 @@ const cssnano = require("gulp-cssnano");
 const postcss = require("gulp-postcss");
 const autoprefixer = require("autoprefixer");
 const rename = require("gulp-rename");
+const gulpIf = require("gulp-if");
 const browserSync = require("browser-sync").create();
+
+const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV == 'development';
 
 gulp.task("styles", function() {
 
   return gulp.src("src/style.scss")
-    .pipe(sourcemaps.init())
+    .pipe(gulpIf(isDevelopment, sourcemaps.init()))
     .pipe(sass())
     .pipe(postcss([
           autoprefixer({browsers: [
@@ -25,7 +28,7 @@ gulp.task("styles", function() {
           ]})
         ]))
     .pipe(cssnano())
-    .pipe(sourcemaps.write())
+    .pipe(gulpIf(isDevelopment, sourcemaps.write()))
     .pipe(gulp.dest("build/css"));
 
 });

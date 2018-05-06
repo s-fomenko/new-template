@@ -32,3 +32,53 @@
     padding: 0 3rem;
   }
 }
+
+//New
+
+$font-default: 'Roboto', 'Arial', sans-serif;
+$color-default: #000;
+$column-size: (100%/12);
+$tablet-width: 768px;
+$desktop-width: 1280px;
+
+@mixin font($font-weight: 400, $font-size: 18px, $line-height: 1.5, $font-family: $font-default, $font-color: null) {
+  font: $font-weight #{$font-size}/#{$line-height} $font-family;
+  color: $font-color;
+}
+
+@mixin tablet {
+  @media all and (min-width: #{$tablet-width}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media all and (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
+
+@mixin col-x($infix, $columns, $padding) {
+  @for $i from 1 through $columns {
+    .col-#{$infix}-#{$i} {
+      width: $column-size * $i;
+      padding-left: $padding;
+      padding-right: $padding;
+    }
+  }
+}
+
+@mixin offset-x($infix, $columns) {
+  @for $i from 1 through $columns {
+    .offset-#{$infix}-#{$i} {
+      margin-left: $column-size * $i;
+    }
+  }
+}
+
+.block {
+  @include font(700, 24px, 1.6, "Arial", #fff)
+}
+
+@include col-x(sm, 12, 10px);
+@include offset-x(sm, 12);

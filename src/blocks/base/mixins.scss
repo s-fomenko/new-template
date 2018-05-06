@@ -55,7 +55,7 @@
 //Примеры использования
 
 .block {
-  @include font(700, 24px, 1.6, "Arial", #fff)
+  @include font(700, 24px, 1.6, "Arial", #fff);
 }
 
 @include col-x(sm, 12, 10px);
